@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
+  <form method="POST" action="/math" id="mathForm">
+    <input name="a" type="number" value="0" id="a"></br>
+    <input name="b" type="number" value="0" id="b"></br>
+    <select name="operand" id="operand">
+      <option value="+">+</option>
+      <option value="-">-</option>
+      <option value="/">/</option>
+      <option value="*">*</option>
+    </select>
+    <input type="submit">
+  </form>
+
+  <p>Result: <span id="result"></span></p>
+
+  <button form="mathForm" formaction="/math_service">Json Result (POST)</button>
+  <button id="btn">Json Result (AJAX)</button>
+</body>
+
+<script>
+  // Using Fetch API to POST data to the Server
+  const btn = document.getElementById('btn');
+
+  btn.onclick = function (e) {
+
+    const form = document.getElementById('mathForm');
+    const formData = new FormData(form);
+
+    fetch('/math_service', {
+      method: 'POST',
+      body: formData
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      result = document.getElementById('result');
+      result.innerText = json;
+    }).catch(error => console.log(error));
+
+    form.reset();
+  }
+
+
+</script>
+
+</html>
